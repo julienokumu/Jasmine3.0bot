@@ -125,6 +125,11 @@
         "Hi Judy! Nice to meet you! You must be Julien's mom, as he was creating me he told me a lot about you. He say's your the best mom!",
         "Nice to finally meet you Judith, your Julien's mom right? I've heard a lot of heart-warming stories about you as he was building me, he seems to love you very much!"
       ]
+    },
+    {
+      "tag":"ruto",
+      "patterns":["Who is the president of Kenya?", "President of Kenya?", "Who's the president of kenya?"],
+      "responses":["We have no president, RUTO MUST GO!"]
     }
   ]
 }
