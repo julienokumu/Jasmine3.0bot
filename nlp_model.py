@@ -1,6 +1,7 @@
 import json
 import nltk
 nltk.download('punkt')
+nltk.download('punkt_tab')
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open('intents.json').read())
