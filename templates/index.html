@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JasmineChatbot | CodewithJulien</title>
+    <style>
+      #chat-log {
+        padding: 10px;
+        border: 3px solid black;
+        border-radius: 5px;
+        width: 500px;
+        height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .user-message {
+        background-color: rgb(41, 73, 163);
+        padding: 10px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        align-self: flex-end; /* Align user messages to the right */
+      }
+      .bot-message {
+        background-color: rgb(94, 53, 83);
+        padding: 10px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        align-self: flex-start; /* Align bot messages to the left */
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+      h1 {
+        color: rgb(129, 16, 99);
+      }
+      h2 {
+        color: rgb(41, 73, 163);
+      }
+      /* Add some styles to make the input and submit button look more appealing */
+      input[type="text"] {
+        padding: 10px;
+        border-color: rgb(41, 73, 163);
+        width: 300px;
+        font-size: 16px;
+        font-family: "Oswald", sans-serif;
+      }
+      input[type="submit"] {
+        padding: 14px;
+        border: none;
+        background-color: rgb(41, 73, 163);
+        color: #fff;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+
+      #form {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: calc(50% + 170px);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      #form input[type="text"] {
+        margin-right: 10px;
+      }
+      h1 .jasminelogo {
+        width: 50px; /* Add this line to set the width of the image */
+        height: 50px; /* Add this line to set the height of the image */
+      }
+      body {
+        font-family: "Oswald", sans-serif;
+        background-color: whitesmoke;
+      }
+      /* For mobile devices (max-width: 480px) */
+      @media only screen and (max-width: 480px) {
+        /* Add styles here */
+      }
+
+      /* For tablets (min-width: 481px and max-width: 768px) */
+      @media only screen and (min-width: 481px) and (max-width: 768px) {
+        /* Add styles here */
+      }
+
+      /* For desktops (min-width: 769px) */
+      @media only screen and (min-width: 769px) {
+        /* Add styles here */
+      }
+      @media only screen and (max-width: 480px) {
+        #chat-log {
+          width: 100%; /* Make the chat log full-width */
+          height: 200px; /* Adjust the height */
+        }
+        #form {
+          flex-direction: column; /* Change the form layout to column */
+          align-items: center; /* Center the form elements */
+        }
+        input[type="text"] {
+          width: 100%; /* Make the input field full-width */
+        }
+        input[type="submit"] {
+          width: 100%; /* Make the submit button full-width */
+        }
+      }
+      @media only screen and (min-width: 481px) and (max-width: 768px) {
+        #chat-log {
+          width: 80%; /* Make the chat log 80% wide */
+          height: 250px; /* Adjust the height */
+        }
+        #form {
+          flex-direction: row; /* Change the form layout back to row */
+        }
+        input[type="text"] {
+          width: 70%; /* Make the input field 70% wide */
+        }
+        input[type="submit"] {
+          width: 30%; /* Make the submit button 30% wide */
+        }
+      }
+      @media only screen and (min-width: 769px) {
+        #chat-log {
+          width: 500px; /* Keep the original width */
+          height: 300px; /* Keep the original height */
+        }
+        #form {
+          flex-direction: row; /* Keep the original form layout */
+        }
+        input[type="text"] {
+          width: 300px; /* Keep the original width */
+        }
+        input[type="submit"] {
+          width: auto; /* Keep the original width */
+        }
+      }
+    </style>
+    <link
+      rel="icon"
+      type="image/png"
+      href="/templates/chat-bot-svgrepo-com.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1>
+      <img
+        class="jasminelogo"
+        src="/static/jasminelogo.png"
+        alt=""
+        style="display: inline-block; vertical-align: middle"
+      />
+      <span style="display: inline-block; vertical-align: middle"
+        >JasmineChatbot</span
+      >
+    </h1>
+    <h2>CodewithJulien</h2>
+
+    <div id="chat-log"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatLog = document.getElementById("chat-log");
+        document
+          .querySelector("form")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/get", true);
+            xhr.setRequestHeader(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            );
+            const userMessage =
+              document.querySelector("input[name='msg']").value;
+            xhr.send("msg=" + userMessage);
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                const response = xhr.responseText;
+                const userMessageEntry = document.createElement("p");
+                userMessageEntry.textContent = "" + userMessage;
+                userMessageEntry.className = "user-message";
+                chatLog.appendChild(userMessageEntry);
+
+                const botMessageEntry = document.createElement("p");
+                botMessageEntry.style.display = "flex"; // Add this line to make the p element a flex container
+                botMessageEntry.style.paddingRight = 10; // Add padding to right
+                botMessageEntry.style.alignItems = "center"; // Add this line to vertically center the elements
+                const botImage = document.createElement("img");
+                botImage.src = "/static/jasminelogo.png"; // Replace with your image URL
+                botImage.width = 24; // Adjust the width and height as needed
+                botImage.height = 24;
+                botMessageEntry.appendChild(botImage);
+                const responseText = document.createTextNode(response);
+                botMessageEntry.appendChild(responseText);
+                botMessageEntry.className = "bot-message";
+                chatLog.appendChild(botMessageEntry);
+
+                document.querySelector("input[name='msg']").value = "";
+                chatLog.scrollTop = chatLog.scrollHeight;
+              }
+            };
+          });
+      });
+    </script>
+
+    <form action="/get" method="post" id="form">
+      <input type="text" name="msg" placeholder="Type a message..." />
+      <input type="submit" value="Send" />
+    </form>
+  </body>
+</html>
